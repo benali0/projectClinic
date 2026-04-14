@@ -1,0 +1,138 @@
+/* Avatar */
+.avatar-circle {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+/* Step Indicator */
+.step-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #6c757d;
+  transition: all 0.3s ease;
+}
+
+.step-indicator.active {
+  color: #0d6efd;
+}
+
+.step-indicator.completed {
+  color: #198754;
+}
+
+.step-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: white;
+}
+
+.step-indicator.active .step-circle {
+  background: #0d6efd;
+  color: white;
+  border-color: #0d6efd;
+}
+
+.step-indicator.completed .step-circle {
+  background: #198754;
+  color: white;
+  border-color: #198754;
+}
+
+/* Success Circle */
+.success-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: scaleIn 0.5s ease;
+}
+
+@keyframes scaleIn {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Radio Cards */
+.form-check.card {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.form-check.card:hover {
+  background-color: #f8f9fa;
+}
+
+.form-check.card.border-primary {
+  background-color: #e7f1ff;
+}
+
+/* Progress Bar */
+.progress {
+  border-radius: 10px;
+  background-color: #e9ecef;
+}
+
+.progress-bar {
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+/* Form Styling */
+.form-control:focus, .form-select:focus {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+textarea.form-control {
+  resize: vertical;
+}
+
+/* Buttons */
+.btn {
+  transition: all 0.2s ease;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Card Hover Effects */
+.card {
+  transition: box-shadow 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .step-indicator small {
+    font-size: 0.75rem;
+  }
+  
+  .step-circle {
+    width: 35px;
+    height: 35px;
+    font-size: 0.9rem;
+  }
+}

@@ -1,0 +1,45 @@
+// Custom Theming for Angular Material - Clinique Medical Blue
+@use '@angular/material' as mat;
+
+// Medical blue custom palette
+$clinique-primary: (
+  50: #e3f2fd,
+  100: #bbdefb,
+  200: #90caf9,
+  300: #64b5f6,
+  400: #42a5f5,
+  500: #1976d2,
+  600: #1565c0,
+  700: #0d47a1,
+  800: #0a3d8f,
+  900: #07306e,
+  contrast: (
+    50: rgba(0, 0, 0, 0.87),
+    100: rgba(0, 0, 0, 0.87),
+    200: rgba(0, 0, 0, 0.87),
+    300: rgba(0, 0, 0, 0.87),
+    400: rgba(0, 0, 0, 0.87),
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  )
+);
+
+html {
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      primary: mat.$azure-palette,
+      tertiary: mat.$cyan-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+// Warn color override
+.mat-warn {
+  --mat-sys-error: #d32f2f;
+}

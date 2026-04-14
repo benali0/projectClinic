@@ -1,0 +1,50 @@
+import { Component, Input } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+
+@Component({
+  selector: 'app-empty-state',
+  standalone: true,
+  imports: [MatIconModule],
+  template: `
+    <div class="empty-state">
+      <mat-icon class="empty-icon">{{ icon }}</mat-icon>
+      <h3 class="empty-title">{{ title }}</h3>
+      <p class="empty-message">{{ message }}</p>
+      <ng-content></ng-content>
+    </div>
+  `,
+  styles: [`
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+      text-align: center;
+    }
+    .empty-icon {
+      font-size: 64px;
+      width: 64px;
+      height: 64px;
+      color: #bdbdbd;
+      margin-bottom: 16px;
+    }
+    .empty-title {
+      font-size: 18px;
+      font-weight: 500;
+      color: #424242;
+      margin: 0 0 8px 0;
+    }
+    .empty-message {
+      font-size: 14px;
+      color: #9e9e9e;
+      margin: 0 0 16px 0;
+      max-width: 400px;
+    }
+  `]
+})
+export class EmptyStateComponent {
+  @Input() icon = 'inbox';
+  @Input() title = 'Aucune donnée';
+  @Input() message = '';
+}

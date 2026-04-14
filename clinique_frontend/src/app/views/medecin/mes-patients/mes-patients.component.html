@@ -1,0 +1,46 @@
+<div class="container-fluid py-4">
+  <h4 class="mb-4 text-primary">
+    <i class="bi bi-people me-2"></i>Mes Patients
+  </h4>
+
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary"></div>
+  </div>
+
+  <div *ngIf="!loading && patients.length === 0" class="alert alert-info">
+    <i class="bi bi-info-circle me-2"></i>Aucun patient trouvé
+  </div>
+
+  <div class="row g-4" *ngIf="!loading && patients.length > 0">
+    <div class="col-md-6 col-lg-4" *ngFor="let patient of patients">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
+                 style="width: 60px; height: 60px; font-size: 1.3rem;">
+              {{ patient.prenom.charAt(0) }}{{ patient.nom.charAt(0) }}
+            </div>
+            <div>
+              <h5 class="mb-0">{{ patient.prenom }} {{ patient.nom }}</h5>
+              <small class="text-muted">{{ patient.email }}</small>
+            </div>
+          </div>
+          
+          <div class="d-flex justify-content-between text-muted small mb-3">
+            <span><i class="bi bi-calendar me-1"></i>{{ patient.nbRdv }} RDV</span>
+            <span><i class="bi bi-telephone me-1"></i>{{ patient.tel || 'N/A' }}</span>
+          </div>
+          
+          <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-primary flex-fill" (click)="viewDossier(patient.id)">
+              <i class="bi bi-folder-open me-1"></i>Dossier
+            </button>
+            <button class="btn btn-sm btn-outline-success" (click)="nouveauRdv(patient.id)">
+              <i class="bi bi-calendar-plus"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

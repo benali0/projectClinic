@@ -1,0 +1,100 @@
+<!-- components/notification-medecin/notification-medecin.component.html -->
+
+<div class="notification-container">
+  <!-- Cloche avec badge -->
+  <button 
+    class="notification-bell" 
+    (click)="toggleDropdown()"
+    [class.active]="showDropdown"
+    title="Notifications">
+    
+    <span class="material-icons">
+      {{ unreadCount > 0 ? 'notifications_active' : 'notifications' }}
+    </span>
+    
+    <span *ngIf="unreadCount > 0" class="badge">
+      {{ unreadCount > 99 ? '99+' : unreadCount }}
+    </span>
+  </button>
+
+  <!-- Dropdown -->
+  <div class="notification-dropdown" *ngIf="showDropdown">
+    
+    <!-- Header -->
+    <div class="dropdown-header">
+      <h3>Notifications</h3>
+      <div class="header-actions">
+        <button 
+          *ngIf="unreadCount > 0"
+          class="btn-mark-all"
+          (click)="markAllAsRead()"
+          title="Tout marquer comme lu">
+          <span class="material-icons">done_all</span>
+        </button>
+        <button 
+          class="btn-close"
+          (click)="closeDropdown()">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-state" *ngIf="loading">
+      <span class="spinner"></span>
+      <p>Chargement...</p>
+    </div>
+
+    <!-- Liste vide -->
+    <div class="empty-state" *ngIf="!loading && notifications.length === 0">
+      <span class="material-icons">notifications_off</span>
+      <p>Aucune notification</p>
+    </div>
+
+    <!-- Liste des notifications -->
+    <div class="notification-list" *ngIf="!loading && notifications.length > 0">
+      <div 
+        *ngFor="let notif of notifications"
+        class="notification-item"
+        [class.unread]="notif.statut === 'NON_LUE'"
+        [class.read]="notif.statut === 'LUE'"
+        (click)="goToRendezVous(notif)">
+
+        <!-- Icône -->
+        <div class="notification-icon" [class]="getColor(notif.type)">
+          <span class="material-icons">{{ getIcon(notif.type) }}</span>
+        </div>
+
+        <!-- Contenu -->
+        <div class="notification-content">
+          <div class="notification-header-row">
+            <span class="notification-type">{{ getTypeLabel(notif.type) }}</span>
+            <span class="notification-time">{{ formatDate(notif.dateEnvoi) }}</span>
+          </div>
+          
+          <p class="notification-message">{{ notif.message }}</p>
+          
+          <div class="notification-footer" *ngIf="notif.patientNom">
+            <small>Patient: {{ notif.patientNom }}</small>
+          </div>
+        </div>
+
+        <!-- Action mark as read -->
+        <button 
+          *ngIf="notif.statut === 'NON_LUE'"
+          class="btn-mark-read"
+          (click)="markAsRead(notif, $event)"
+          title="Marquer comme lu">
+          <span class="material-icons">check_circle_outline</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="dropdown-footer" *ngIf="notifications.length > 0">
+      <button class="btn-view-all" (click)="closeDropdown()">
+        Voir tout l'historique
+      </button>
+    </div>
+  </div>
+</div>

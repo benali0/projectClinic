@@ -1,0 +1,85 @@
+<div class="container mt-4">
+
+  <!-- HEADER -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>🔔 Mes Notifications</h4>
+
+    <div>
+      <span *ngIf="unreadCount > 0" class="badge bg-danger me-2">
+        {{ unreadCount }} non lues
+      </span>
+
+      <button class="btn btn-sm btn-outline-primary" (click)="markAllAsRead()">
+        Tout marquer comme lu
+      </button>
+    </div>
+  </div>
+
+  <!-- FILTRES -->
+  <div class="mb-3">
+    <button class="btn btn-sm me-2"
+            [class.btn-primary]="activeFilter === 'ALL'"
+            [class.btn-outline-primary]="activeFilter !== 'ALL'"
+            (click)="setFilter('ALL')">
+      Toutes
+    </button>
+
+    <button class="btn btn-sm me-2"
+            [class.btn-primary]="activeFilter === 'NON_LUE'"
+            [class.btn-outline-primary]="activeFilter !== 'NON_LUE'"
+            (click)="setFilter('NON_LUE')">
+      Non lues
+    </button>
+
+    <button class="btn btn-sm"
+            [class.btn-primary]="activeFilter === 'LUE'"
+            [class.btn-outline-primary]="activeFilter !== 'LUE'"
+            (click)="setFilter('LUE')">
+      Lues
+    </button>
+  </div>
+
+  <!-- LISTE -->
+  <div *ngIf="filteredNotifications.length > 0; else emptyState">
+
+    <div *ngFor="let notif of filteredNotifications"
+         class="card mb-2 shadow-sm"
+         [ngClass]="{'border-primary': notif.statut === 'NON_LUE'}">
+
+      <div class="card-body d-flex align-items-start">
+
+        <!-- ICON -->
+        <i class="bi me-3 fs-4"
+           [ngClass]="getNotificationIcon(notif.type)"></i>
+
+        <!-- CONTENT -->
+        <div class="flex-grow-1">
+          <h6 class="mb-1">{{ getNotificationTitle(notif.type) }}</h6>
+          <p class="mb-1">{{ notif.message }}</p>
+
+          <small class="text-muted">
+            {{ formatDate(notif.dateEnvoi) }}
+          </small>
+        </div>
+
+        <!-- ACTION -->
+        <button *ngIf="notif.statut === 'NON_LUE'"
+                class="btn btn-sm btn-outline-success"
+                (click)="markAsRead(notif.id!)">
+          ✔
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- EMPTY -->
+  <ng-template #emptyState>
+    <div class="text-center text-muted mt-5">
+      <i class="bi bi-bell fs-1"></i>
+      <p>Aucune notification</p>
+    </div>
+  </ng-template>
+
+</div>

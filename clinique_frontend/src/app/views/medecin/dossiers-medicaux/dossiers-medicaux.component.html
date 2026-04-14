@@ -1,0 +1,139 @@
+<div class="dossier-container">
+  <!-- Header -->
+  <div class="dossier-header">
+    <div class="header-content">
+      <div class="header-title">
+        <h2><i class="bi bi-folder-medical me-2"></i>Dossiers Médicaux</h2>
+      </div>
+      <div class="header-search">
+        <input type="text" class="form-control" placeholder="Rechercher un patient...">
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="dossier-content">
+    <div class="row g-4">
+      <!-- Patients List -->
+      <div class="col-lg-3">
+        <div class="card card-primary">
+          <div class="card-header">
+            <i class="bi bi-people me-2"></i>Mes Patients
+          </div>
+          <div class="card-body p-0">
+            <div *ngIf="loading" class="text-center py-4">
+              <div class="spinner"></div>
+            </div>
+
+            <div *ngIf="!loading && patients.length === 0" class="text-center py-4 text-muted">
+              <i class="bi bi-inbox fs-1"></i>
+              <p class="mt-2">Aucun patient</p>
+            </div>
+
+            <div class="patients-list" *ngIf="!loading && patients.length > 0">
+              <div *ngFor="let patient of patients" 
+                   class="patient-item" 
+                   [class.active]="selectedPatient?.id === patient.id"
+                   (click)="selectPatient(patient)">
+                
+                <div class="patient-avatar">
+                  {{ patient.prenom.charAt(0) }}{{ patient.nom.charAt(0) }}
+                </div>
+
+                <div class="patient-info">
+                  <h6>{{ patient.prenom }} {{ patient.nom }}</h6>
+                  <small>{{ patient.email }}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Patient Medical File -->
+      <div class="col-lg-9" *ngIf="selectedPatient">
+        <!-- Patient Summary -->
+        <div class="patient-summary-grid">
+          <div class="summary-card">
+            <div class="summary-icon info">
+              <i class="bi bi-person"></i>
+            </div>
+            <div class="summary-text">
+              <label>Informations</label>
+              <p><strong>{{ selectedPatient.prenom }} {{ selectedPatient.nom }}</strong></p>
+            </div>
+          </div>
+
+          <div class="summary-card">
+            <div class="summary-icon warning">
+              <i class="bi bi-exclamation-circle"></i>
+            </div>
+            <div class="summary-text">
+              <label>Allergies</label>
+              <p>À remplir</p>
+            </div>
+          </div>
+
+          <div class="summary-card">
+            <div class="summary-icon success">
+              <i class="bi bi-heart-pulse"></i>
+            </div>
+            <div class="summary-text">
+              <label>Maladies Chroniques</label>
+              <p>À remplir</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="dossier-tabs mt-4">
+          <div class="tabs-navigation">
+            <button class="tab-btn active" onclick="switchTab('consultations')">
+              <i class="bi bi-calendar-check me-2"></i>Consultations
+            </button>
+            <button class="tab-btn" onclick="switchTab('prescriptions')">
+              <i class="bi bi-prescription2 me-2"></i>Prescriptions
+            </button>
+            <button class="tab-btn" onclick="switchTab('antecedents')">
+              <i class="bi bi-file-earmark-text me-2"></i>Antécédents
+            </button>
+            <button class="tab-btn" onclick="switchTab('analyses')">
+              <i class="bi bi-beaker me-2"></i>Analyses
+            </button>
+          </div>
+
+          <!-- Tab Contents -->
+          <div class="tabs-content">
+            <div id="consultations-tab" class="tab-content active">
+              <div class="empty-state">
+                <i class="bi bi-calendar-check fs-1"></i>
+                <p>Aucune consultation enregistrée</p>
+              </div>
+            </div>
+
+            <div id="prescriptions-tab" class="tab-content">
+              <div class="empty-state">
+                <i class="bi bi-prescription2 fs-1"></i>
+                <p>Aucune prescription enregistrée</p>
+              </div>
+            </div>
+
+            <div id="antecedents-tab" class="tab-content">
+              <div class="empty-state">
+                <i class="bi bi-file-earmark-text fs-1"></i>
+                <p>Aucun antécédent enregistré</p>
+              </div>
+            </div>
+
+            <div id="analyses-tab" class="tab-content">
+              <div class="empty-state">
+                <i class="bi bi-beaker fs-1"></i>
+                <p>Aucune analyse enregistrée</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

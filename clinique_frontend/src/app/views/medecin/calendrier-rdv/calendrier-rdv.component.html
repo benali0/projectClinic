@@ -1,0 +1,125 @@
+<div class="container-fluid py-4">
+  <div class="row">
+    <!-- Calendrier -->
+    <div class="col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">
+            <i class="bi bi-calendar3 me-2 text-primary"></i>Calendrier des Rendez-vous
+          </h5>
+          <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-outline-success btn-sm" (click)="previousMonth()">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            <span class="fw-bold">{{ currentMonth | date:'MMMM yyyy' }}</span>
+            <button class="btn btn-outline-success btn-sm" (click)="nextMonth()">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div class="card-body">
+          <!-- Jours de la semaine -->
+          <div class="row g-0 text-center mb-2">
+            <div class="col" *ngFor="let day of weekDays">
+              <div class="p-2 fw-bold text-primary">{{ day }}</div>
+            </div>
+          </div>
+          
+          <!-- Grille du calendrier -->
+          <div class="row g-0">
+            <div class="col" *ngFor="let date of calendarDays">
+              <div 
+                class="calendar-day"
+                [class.today]="isToday(date)"
+                [class.selected]="isSelected(date)"
+                [class.other-month]="!isCurrentMonth(date)"
+                (click)="selectDate(date)">
+                
+                <div class="day-number">{{ date.getDate() }}</div>
+                
+                <div class="rdv-indicators" *ngIf="getRdvCount(date) > 0">
+                  <span class="badge bg-primary rounded-pill">
+                    {{ getRdvCount(date) }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Liste des RDV du jour sélectionné -->
+    <div class="col-lg-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">
+            <i class="bi bi-list-check me-2"></i>
+            RDV du {{ selectedDate | date:'dd/MM/yyyy' }}
+          </h5>
+        </div>
+        
+        <div class="card-body p-0">
+          <div *ngIf="loading" class="text-center py-4">
+            <div class="spinner-border text-primary"></div>
+          </div>
+          
+          <div *ngIf="!loading && rendezVous.length === 0" class="text-center py-4 text-muted">
+            <i class="bi bi-calendar-x fs-1"></i>
+            <p class="mt-2">Aucun rendez-vous ce jour</p>
+          </div>
+          
+          <div class="list-group list-group-flush" *ngIf="!loading && rendezVous.length > 0">
+            <div 
+              *ngFor="let rdv of rendezVous" 
+              class="list-group-item list-group-item-action">
+              
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <div class="d-flex align-items-center gap-2 mb-1">
+                    <span class="badge" [class]="getStatusClass(rdv.statut)">
+                      {{ getStatusLabel(rdv.statut) }}
+                    </span>
+                    <span class="fw-bold text-primary">{{ rdv.heure }}</span>
+                  </div>
+                  
+                  <h6 class="mb-1">{{ rdv.patientPrenom }} {{ rdv.patientNom }}</h6>
+                  <p class="mb-1 text-muted small">
+                    <i class="bi bi-telephone me-1"></i>{{ rdv.patientTel }}
+                  </p>
+                  <p class="mb-0 text-muted small">
+                    <i class="bi bi-chat-left-text me-1"></i>{{ rdv.motif }}
+                  </p>
+                </div>
+                
+                <div class="dropdown" *ngIf="rdv.statut !== 'TERMINE' && rdv.statut !== 'ANNULE'">
+                  <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown">
+                    <i class="bi bi-three-dots-vertical"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li *ngIf="rdv.statut === 'EN_ATTENTE'">
+                      <a class="dropdown-item text-primary" href="javascript:void(0)" (click)="confirmRdv(rdv)">
+                        <i class="bi bi-check-circle me-2"></i>Confirmer
+                      </a>
+                    </li>
+                    <li *ngIf="rdv.statut === 'CONFIRME'">
+                      <a class="dropdown-item text-primary" href="javascript:void(0)" (click)="completeRdv(rdv)">
+                        <i class="bi bi-clipboard-check me-2"></i>Consultation
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item text-danger" href="javascript:void(0)" (click)="cancelRdv(rdv)">
+                        <i class="bi bi-x-circle me-2"></i>Annuler
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

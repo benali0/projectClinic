@@ -1,0 +1,83 @@
+<div class="auth-wrapper">
+  <div class="auth-container">
+    <mat-card class="auth-card">
+      <mat-card-content>
+        <!-- Logo -->
+        <div class="auth-header">
+          <img src="logo.svg" alt="Mediterranean Clinic" class="auth-logo-img" width="64" height="64">
+          <h2>Mediterranean Clinic</h2>
+          <p>Connectez-vous à votre espace</p>
+        </div>
+
+        <!-- Error -->
+        @if (errorMessage) {
+          <div class="auth-error">
+            <mat-icon>error_outline</mat-icon>
+            <span>{{ errorMessage }}</span>
+          </div>
+        }
+
+        <!-- Form -->
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <mat-icon matPrefix>email</mat-icon>
+            <input matInput type="email" formControlName="email" placeholder="votre@email.com">
+            @if (loginForm.get('email')?.hasError('required') && loginForm.get('email')?.touched) {
+              <mat-error>L'email est requis</mat-error>
+            }
+            @if (loginForm.get('email')?.hasError('email') && loginForm.get('email')?.touched) {
+              <mat-error>Format d'email invalide</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Mot de passe</mat-label>
+            <mat-icon matPrefix>lock</mat-icon>
+            <input matInput [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="••••••••">
+            <button mat-icon-button matSuffix type="button" (click)="showPassword = !showPassword">
+              <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            @if (loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
+              <mat-error>Le mot de passe est requis</mat-error>
+            }
+          </mat-form-field>
+
+          <div class="auth-options">
+            <mat-checkbox>Se souvenir de moi</mat-checkbox>
+          </div>
+
+          <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            class="auth-submit"
+            [disabled]="isLoading">
+            @if (isLoading) {
+              <span class="loading-btn"><mat-spinner diameter="20"></mat-spinner> Connexion...</span>
+            } @else {
+              Se connecter
+            }
+          </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="auth-divider">
+          <span>ou</span>
+        </div>
+
+        <!-- Register link -->
+        <p class="auth-link">
+          Pas encore de compte ?
+          <a routerLink="/register">S'inscrire</a>
+        </p>
+
+        <div class="auth-back">
+          <a routerLink="/welcome">
+            <mat-icon>arrow_back</mat-icon> Retour à l'accueil
+          </a>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

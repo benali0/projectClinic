@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Background circle with Mediterranean blue gradient -->
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1976d2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0d47a1;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="waveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Main circle -->
+  <circle cx="100" cy="100" r="92" fill="url(#bgGrad)" />
+
+  <!-- Mediterranean wave decoration (bottom) -->
+  <path d="M30 130 Q50 120, 70 130 T110 130 T150 130 T170 130" 
+        fill="none" stroke="url(#waveGrad)" stroke-width="3" stroke-linecap="round"/>
+  <path d="M25 140 Q45 130, 65 140 T105 140 T145 140 T175 140" 
+        fill="none" stroke="url(#waveGrad)" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- White medical cross -->
+  <rect x="85" y="45" width="30" height="80" rx="6" fill="white" />
+  <rect x="65" y="65" width="70" height="30" rx="6" fill="white" />
+
+  <!-- Small olive branch accent (left) -->
+  <ellipse cx="52" cy="78" rx="6" ry="3.5" fill="rgba(255,255,255,0.5)" transform="rotate(-30 52 78)"/>
+  <ellipse cx="46" cy="85" rx="5" ry="3" fill="rgba(255,255,255,0.35)" transform="rotate(-40 46 85)"/>
+  <line x1="58" y1="72" x2="42" y2="90" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- Small olive branch accent (right) -->
+  <ellipse cx="148" cy="78" rx="6" ry="3.5" fill="rgba(255,255,255,0.5)" transform="rotate(30 148 78)"/>
+  <ellipse cx="154" cy="85" rx="5" ry="3" fill="rgba(255,255,255,0.35)" transform="rotate(40 154 85)"/>
+  <line x1="142" y1="72" x2="158" y2="90" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- Outer ring -->
+  <circle cx="100" cy="100" r="92" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="3"/>
+</svg>

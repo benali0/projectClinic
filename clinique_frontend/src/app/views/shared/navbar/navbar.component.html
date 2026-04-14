@@ -1,0 +1,50 @@
+<mat-toolbar class="public-toolbar">
+  <div class="toolbar-container">
+    <!-- Brand -->
+    <a class="brand" href="javascript:void(0)" (click)="navigateTo('/')">
+      <img src="logo.svg" alt="Mediterranean Clinic" class="brand-logo" width="36" height="36">
+      <span class="brand-name">Mediterranean Clinic</span>
+    </a>
+
+    <!-- Desktop nav -->
+    <nav class="nav-links">
+      <a href="javascript:void(0)" (click)="navigateTo('/')" class="nav-link">Accueil</a>
+    </nav>
+
+    <div class="nav-actions">
+      @if (!authService.isLoggedIn()) {
+        <button mat-button (click)="navigateTo('/login')">
+          <mat-icon>login</mat-icon>
+          Connexion
+        </button>
+        <button mat-flat-button color="primary" (click)="navigateTo('/register')">
+          <mat-icon>person_add</mat-icon>
+          S'inscrire
+        </button>
+      } @else {
+        <button mat-stroked-button color="warn" (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          Déconnexion
+        </button>
+      }
+    </div>
+
+    <!-- Mobile toggle -->
+    <button mat-icon-button class="mobile-toggle" (click)="isMenuOpen = !isMenuOpen">
+      <mat-icon>{{ isMenuOpen ? 'close' : 'menu' }}</mat-icon>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  @if (isMenuOpen) {
+    <div class="mobile-menu">
+      <a href="javascript:void(0)" (click)="navigateTo('/')" class="mobile-link">Accueil</a>
+      @if (!authService.isLoggedIn()) {
+        <a href="javascript:void(0)" (click)="navigateTo('/login')" class="mobile-link">Connexion</a>
+        <a href="javascript:void(0)" (click)="navigateTo('/register')" class="mobile-link primary">S'inscrire</a>
+      } @else {
+        <a href="javascript:void(0)" (click)="logout()" class="mobile-link warn">Déconnexion</a>
+      }
+    </div>
+  }
+</mat-toolbar>

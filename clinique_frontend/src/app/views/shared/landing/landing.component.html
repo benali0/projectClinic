@@ -1,0 +1,131 @@
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="hero-container">
+    <div class="hero-content">
+      <div class="hero-text">
+        <span class="hero-badge">
+          <mat-icon>verified</mat-icon> Santé & Bien-être
+        </span>
+        <h1 class="hero-title">
+          Votre santé mérite <span class="text-primary">l'excellence</span>
+        </h1>
+        <p class="hero-desc">
+          Une expérience médicale réinventée. Prenez rendez-vous en ligne, 
+          accédez à votre dossier médical, et suivez vos soins en toute sérénité.
+        </p>
+        <div class="hero-actions">
+          <a mat-flat-button color="primary" routerLink="/login" class="hero-btn">
+            <mat-icon>calendar_month</mat-icon> Prendre RDV
+          </a>
+          <a mat-stroked-button routerLink="/register" class="hero-btn">
+            <mat-icon>person_add</mat-icon> Créer un compte
+          </a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <strong>50+</strong>
+            <small>Médecins experts</small>
+          </div>
+          <div class="hero-stat">
+            <strong>10k+</strong>
+            <small>Patients satisfaits</small>
+          </div>
+          <div class="hero-stat">
+            <strong>4.9</strong>
+            <small>Note moyenne</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?auto=format&fit=crop&w=800&q=80" 
+               alt="Médecin avec patient" 
+               class="hero-image" 
+               loading="eager">
+          <div class="hero-image-overlay"></div>
+        </div>
+        <div class="floating-card card-1">
+          <mat-icon class="fc-icon success">check_circle</mat-icon>
+          <div>
+            <p class="fc-title">Dr. Sophie Martin</p>
+            <small class="fc-sub">Cardiologue disponible</small>
+          </div>
+        </div>
+        <div class="floating-card card-2">
+          <mat-icon class="fc-icon warning">schedule</mat-icon>
+          <div>
+            <p class="fc-title">Prochain RDV</p>
+            <small class="fc-sub">Aujourd'hui, 14:30</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Services Section -->
+<section class="services-section">
+  <div class="section-container">
+    <div class="section-header">
+      <span class="section-badge">Nos Services</span>
+      <h2>Une clinique moderne à votre service</h2>
+      <p>Tout ce dont vous avez besoin pour votre santé, accessible en quelques clics</p>
+    </div>
+
+    <div class="services-grid">
+      <mat-card class="service-card" appearance="outlined">
+        <mat-card-content>
+          <div class="service-icon primary">
+            <mat-icon>calendar_month</mat-icon>
+          </div>
+          <h3>RDV en ligne</h3>
+          <p>Réservez votre consultation 24h/24, 7j/7 en quelques clics</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="service-card" appearance="outlined">
+        <mat-card-content>
+          <div class="service-icon warning">
+            <mat-icon>folder_shared</mat-icon>
+          </div>
+          <h3>Dossier digital</h3>
+          <p>Accédez à votre historique médical sécurisé</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="service-card" appearance="outlined">
+        <mat-card-content>
+          <div class="service-icon danger">
+            <mat-icon>notifications_active</mat-icon>
+          </div>
+          <h3>Rappels</h3>
+          <p>Notifications pour ne jamais manquer un rendez-vous</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="service-card" appearance="outlined">
+        <mat-card-content>
+          <div class="service-icon info">
+            <mat-icon>security</mat-icon>
+          </div>
+          <h3>Sécurité</h3>
+          <p>Vos données sont chiffrées et confidentielles</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+  <div class="cta-container">
+    <h2>Prêt à prendre soin de vous ?</h2>
+    <p>Rejoignez des milliers de patients qui ont choisi la qualité et la sérénité</p>
+    <a mat-flat-button routerLink="/register" class="cta-btn">
+      <mat-icon>arrow_forward</mat-icon> Commencer maintenant
+    </a>
+  </div>
+</section>
+

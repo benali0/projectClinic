@@ -1,0 +1,87 @@
+/* Stats Cards */
+.stat-card {
+  transition: all 0.2s ease;
+  border-width: 2px;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Avatar */
+.avatar-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+/* Table Styles */
+.table > tbody > tr {
+  transition: background-color 0.2s ease;
+}
+
+.table > tbody > tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Row States */
+.table-secondary.opacity-50 {
+  opacity: 0.6;
+}
+
+.table-primary.bg-opacity-25 {
+  background-color: rgba(13, 110, 253, 0.08) !important;
+}
+
+.table-dark.bg-opacity-10 {
+  background-color: rgba(33, 37, 41, 0.05) !important;
+}
+
+.table-warning {
+  background-color: #fff3cd !important;
+}
+
+.table-danger {
+  background-color: #f8d7da !important;
+}
+
+/* Buttons */
+.btn-group .btn {
+  border-radius: 6px !important;
+  margin: 0 2px;
+}
+
+/* Modal */
+.modal-content {
+  border-radius: 12px;
+}
+
+.icon-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .btn-group {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .stat-card {
+    margin-bottom: 0.5rem;
+  }
+}
