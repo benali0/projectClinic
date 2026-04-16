@@ -7,7 +7,9 @@ import { Router, RouterLink } from '@angular/router';
 import { RendezVousService } from '../../../services/rendezvous.service';
 import { ApiService } from '../../../services/api.service';
 import { AuthService } from '../../../services/auth.service';
+import { SpecialiteApiService } from '../../../services/specialite-api.service';
 import { Medecin } from '../../../models/medecin.model';
+import { Specialite } from '../../../models/specialite.model';
 import { RendezVousRequest } from '../../../models/rendezvous.model';
 
 @Component({
@@ -21,26 +23,27 @@ export class PrendreRdvComponent implements OnInit {
   etape = 1;
   medecins: Medecin[] = [];
   medecinsFiltres: Medecin[] = [];
-  specialites: string[] = [];
+  specialites: Specialite[] = [];
   
   // Filtres
-  specialiteSelectionnee = '';
+  specialiteSelectionnee: number | null = null;
   rechercheMedecin = '';
   
   medecinSelectionne: Medecin | null = null;
-  dateSelectionnee = ''; // 🔥 vide par défaut pour afficher le message
+  dateSelectionnee = '';
   creneauSelectionne = '';
   creneauxDisponibles: string[] = [];
   creneauxOccupes: string[] = [];
   
   // États de chargement
+  loadingSpecialites = false;
+  loadingMedecins = false;
   loadingCreneaux = false;
   loadingOccupes = false;
   isLoading = false;
   
   errorMessage = '';
 
-  // Interdire le jour courant : dateMin = demain
   dateMin: string = '';
 
   rdvForm: FormGroup;
@@ -50,13 +53,13 @@ export class PrendreRdvComponent implements OnInit {
     private apiService: ApiService,
     private rdvService: RendezVousService,
     private authService: AuthService,
+    private specialiteService: SpecialiteApiService,
     private router: Router
   ) {
     this.rdvForm = this.fb.group({
       motif: ['', [Validators.required, Validators.minLength(5)]]
     });
 
-    // 🔥 Calcul de demain pour dateMin
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(today.getDate() + 1);
@@ -69,36 +72,52 @@ export class PrendreRdvComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadMedecins();
+    this.loadSpecialites();
   }
 
-  loadMedecins(): void {
-    this.apiService.getPublicMedecins().subscribe({
+  loadSpecialites(): void {
+    this.loadingSpecialites = true;
+    this.specialiteService.getAll().subscribe({
       next: (data) => {
-        this.medecins = data;
-        this.medecinsFiltres = [...data];
-        this.specialites = [...new Set(data.map(m => m.specialite))].filter(Boolean).sort();
+        this.specialites = data;
+        this.loadingSpecialites = false;
       },
-      error: () => this.errorMessage = 'Erreur lors du chargement des médecins'
-    });
-  }
-
-  filtrerMedecins(): void {
-    this.medecinsFiltres = this.medecins.filter(m => {
-      const matchSpecialite = !this.specialiteSelectionnee || m.specialite === this.specialiteSelectionnee;
-      const matchRecherche = !this.rechercheMedecin || 
-        `${m.prenom} ${m.nom}`.toLowerCase().includes(this.rechercheMedecin.toLowerCase()) ||
-        m.specialite.toLowerCase().includes(this.rechercheMedecin.toLowerCase());
-      return matchSpecialite && matchRecherche;
+      error: () => {
+        this.errorMessage = 'Erreur lors du chargement des spécialités';
+        this.loadingSpecialites = false;
+      }
     });
   }
 
   onSpecialiteChange(): void {
-    this.filtrerMedecins();
+    this.medecinSelectionne = null;
+    this.medecinsFiltres = [];
+    this.medecins = [];
+
+    if (!this.specialiteSelectionnee) {
+      return;
+    }
+
+    this.loadingMedecins = true;
+    this.apiService.getMedecinsBySpecialiteId(this.specialiteSelectionnee).subscribe({
+      next: (data) => {
+        this.medecins = data;
+        this.medecinsFiltres = [...data];
+        this.loadingMedecins = false;
+      },
+      error: () => {
+        this.errorMessage = 'Erreur lors du chargement des médecins';
+        this.loadingMedecins = false;
+      }
+    });
   }
 
   onRechercheChange(): void {
-    this.filtrerMedecins();
+    this.medecinsFiltres = this.medecins.filter(m => {
+      const matchRecherche = !this.rechercheMedecin || 
+        `${m.prenom} ${m.nom}`.toLowerCase().includes(this.rechercheMedecin.toLowerCase());
+      return matchRecherche;
+    });
   }
 
   selectionnerMedecin(medecin: Medecin): void {
@@ -214,9 +233,10 @@ export class PrendreRdvComponent implements OnInit {
   reset(): void {
     this.etape = 1;
     this.medecinSelectionne = null;
-    this.specialiteSelectionnee = '';
+    this.specialiteSelectionnee = null;
     this.rechercheMedecin = '';
-    this.medecinsFiltres = [...this.medecins];
+    this.medecins = [];
+    this.medecinsFiltres = [];
     this.dateSelectionnee = '';
     this.creneauSelectionne = '';
     this.creneauxDisponibles = [];

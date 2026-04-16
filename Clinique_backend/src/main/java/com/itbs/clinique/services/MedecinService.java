@@ -9,6 +9,7 @@ public interface MedecinService {
     List<MedecinResponse> getAllMedecins();
     MedecinResponse getMedecinById(Long id);
     List<MedecinResponse> getMedecinsBySpecialite(String specialite);
+    List<MedecinResponse> getMedecinsBySpecialiteId(Long specialiteId);
     // NOUVEAUX
     Map<String, Object> getMedecinDetails(Long id);
     void deleteMedecin(Long id);

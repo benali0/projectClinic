@@ -20,15 +20,18 @@ public class AuthServiceImpl implements AuthService {
     private final RoleRepository roleRepository;
     private final PatientRepository patientRepository;
     private final MedecinRepository medecinRepository;
+    private final SpecialiteRepository specialiteRepository;
     private final PasswordEncoder passwordEncoder;
 
     public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
                           PatientRepository patientRepository, MedecinRepository medecinRepository,
+                          SpecialiteRepository specialiteRepository,
                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.patientRepository = patientRepository;
         this.medecinRepository = medecinRepository;
+        this.specialiteRepository = specialiteRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -104,7 +107,18 @@ public class AuthServiceImpl implements AuthService {
         
         Medecin medecin = new Medecin();
         medecin.setUser(savedUser);
-        medecin.setSpecialite(request.getSpecialite());
+        
+        // Migration progressive : specialiteId (nouveau) prioritaire sur specialite (ancien)
+        if (request.getSpecialiteId() != null) {
+            Specialite specialiteRef = specialiteRepository.findById(request.getSpecialiteId())
+                    .orElseThrow(() -> new RuntimeException("Spécialité non trouvée avec l'id: " + request.getSpecialiteId()));
+            medecin.setSpecialiteRef(specialiteRef);
+            // Sync ancien champ pour compatibilité
+            medecin.setSpecialite(specialiteRef.getNom());
+        } else if (request.getSpecialite() != null && !request.getSpecialite().isBlank()) {
+            // Fallback ancien champ
+            medecin.setSpecialite(request.getSpecialite());
+        }
         medecinRepository.save(medecin);
         
         return AuthResponse.builder()

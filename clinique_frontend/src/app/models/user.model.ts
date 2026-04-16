@@ -31,8 +31,8 @@ export interface CreateMedecinRequest {
   nom: string;
   prenom: string;
   tel?: string;
-  specialite: string;
-
+  specialite?: string;
+  specialiteId?: number;   // nouveau
 }
 
 // 🔥 AUTH RESPONSE COMPLET

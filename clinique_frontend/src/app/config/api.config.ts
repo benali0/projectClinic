@@ -15,6 +15,7 @@ export const API_CONFIG = {
       medecins: '/public/medecins',
       medecinsBySpecialite: '/public/medecins/specialite'
     },
+    specialites: '/specialites',
     rendezvous: {
       base: '/rendezvous',
       creneaux: '/rendezvous/creneaux'

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { 
   FormBuilder, 
@@ -10,7 +10,9 @@ import {
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { SpecialiteApiService } from '../../../services/specialite-api.service';
 import { CreateMedecinRequest } from '../../../models/user.model';
+import { Specialite } from '../../../models/specialite.model';
 
 @Component({
   selector: 'app-create-medecin',
@@ -19,25 +21,21 @@ import { CreateMedecinRequest } from '../../../models/user.model';
   templateUrl: './create-medecin.component.html',
   styleUrls: ['./create-medecin.component.css']
 })
-export class CreateMedecinComponent {
+export class CreateMedecinComponent implements OnInit {
   medecinForm: FormGroup;
   isLoading = false;
   errorMessage = '';
   successMessage = '';
   showPassword = false;
   showConfirmPassword = false;
+  loadingSpecialites = false;
 
-  specialites = [
-    'Cardiologie', 'Dermatologie', 'Endocrinologie', 
-    'Gastroentérologie', 'Gynécologie', 'Neurologie',
-    'Ophtalmologie', 'Orthopédie', 'Pédiatrie',
-    'Psychiatrie', 'Radiologie', 'Rhumatologie',
-    'Urologie', 'Médecine générale'
-  ];
+  specialites: Specialite[] = [];
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private specialiteService: SpecialiteApiService,
     private router: Router
   ) {
     this.medecinForm = this.fb.group({
@@ -45,10 +43,28 @@ export class CreateMedecinComponent {
       prenom: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       tel: ['', [Validators.pattern(/^[0-9]{8}$/)]],
-      specialite: ['', Validators.required],
+      specialiteId: [null, Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required]
     }, { validators: this.passwordMatchValidator });
+  }
+
+  ngOnInit(): void {
+    this.loadSpecialites();
+  }
+
+  loadSpecialites(): void {
+    this.loadingSpecialites = true;
+    this.specialiteService.getAll().subscribe({
+      next: (data) => {
+        this.specialites = data;
+        this.loadingSpecialites = false;
+      },
+      error: () => {
+        this.errorMessage = 'Erreur lors du chargement des spécialités';
+        this.loadingSpecialites = false;
+      }
+    });
   }
 
   passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
@@ -72,9 +88,19 @@ export class CreateMedecinComponent {
     this.errorMessage = '';
     this.successMessage = '';
 
-    const { confirmPassword, ...data } = this.medecinForm.value;
+    const { confirmPassword, ...formData } = this.medecinForm.value;
 
-    this.authService.createMedecin(data as CreateMedecinRequest).subscribe({
+    // Construire la requête avec specialiteId
+    const data: CreateMedecinRequest = {
+      email: formData.email,
+      password: formData.password,
+      nom: formData.nom,
+      prenom: formData.prenom,
+      tel: formData.tel,
+      specialiteId: formData.specialiteId
+    };
+
+    this.authService.createMedecin(data).subscribe({
       next: (response) => {
         this.isLoading = false;
         

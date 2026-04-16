@@ -91,17 +91,24 @@
               <!-- Spécialité -->
               <div class="mb-3">
                 <label class="form-label small fw-semibold">Spécialité *</label>
-                <select 
-                  class="form-select" 
-                  [class.is-invalid]="medecinForm.get('specialite')?.invalid && medecinForm.get('specialite')?.touched"
-                  formControlName="specialite">
-                  <option value="">Choisir...</option>
-                  @for (spec of specialites; track spec) {
-                    <option [value]="spec">{{ spec }}</option>
+                @if (loadingSpecialites) {
+                  <div class="d-flex align-items-center text-muted small">
+                    <span class="spinner-border spinner-border-sm me-2"></span>
+                    Chargement des spécialités...
+                  </div>
+                } @else {
+                  <select 
+                    class="form-select" 
+                    [class.is-invalid]="medecinForm.get('specialiteId')?.invalid && medecinForm.get('specialiteId')?.touched"
+                    formControlName="specialiteId">
+                    <option [ngValue]="null">Choisir...</option>
+                    @for (spec of specialites; track spec.id) {
+                      <option [ngValue]="spec.id">{{ spec.nom }}</option>
+                    }
+                  </select>
+                  @if (medecinForm.get('specialiteId')?.invalid && medecinForm.get('specialiteId')?.touched) {
+                    <div class="invalid-feedback small">Spécialité requise</div>
                   }
-                </select>
-                @if (medecinForm.get('specialite')?.invalid && medecinForm.get('specialite')?.touched) {
-                  <div class="invalid-feedback small">Spécialité requise</div>
                 }
               </div>
 

@@ -5,4 +5,6 @@ export interface Medecin {
   email: string;
   tel?: string;
   specialite: string;
+  specialiteId?: number;    // nouveau
+  specialiteNom?: string;   // nouveau
 }

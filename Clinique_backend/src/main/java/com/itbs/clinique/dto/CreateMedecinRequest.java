@@ -22,6 +22,9 @@ public class CreateMedecinRequest {
     
     private String tel;
     
-    @NotBlank(message = "La spécialité est obligatoire")
+    // Ancien champ (garde compatibilité)
     private String specialite;
+
+    // Nouveau champ : id de la table specialite
+    private Long specialiteId;
 }

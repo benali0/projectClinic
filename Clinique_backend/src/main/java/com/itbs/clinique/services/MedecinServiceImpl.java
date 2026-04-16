@@ -47,6 +47,13 @@ public class MedecinServiceImpl implements MedecinService {
     }
 
     @Override
+    public List<MedecinResponse> getMedecinsBySpecialiteId(Long specialiteId) {
+        return medecinRepository.findBySpecialiteRef_Id(specialiteId).stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Map<String, Object> getMedecinDetails(Long id) {
         Medecin medecin = medecinRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Médecin non trouvé"));
@@ -80,6 +87,8 @@ public class MedecinServiceImpl implements MedecinService {
                 .email(user.getUsername())
                 .tel(user.getTel())
                 .specialite(medecin.getSpecialite())
+                .specialiteId(medecin.getSpecialiteRef() != null ? medecin.getSpecialiteRef().getId() : null)
+                .specialiteNom(medecin.getSpecialiteRef() != null ? medecin.getSpecialiteRef().getNom() : medecin.getSpecialite())
                 .build();
     }
 }

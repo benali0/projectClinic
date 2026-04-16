@@ -19,13 +19,17 @@ public class PublicController {
         this.medecinService = medecinService;
     }
 
-    // GET /api/public/medecins - Liste publique
+    // GET /api/public/medecins - Liste publique (support optionnel ?specialiteId=)
     @GetMapping("/medecins")
-    public ResponseEntity<List<MedecinResponse>> getAllMedecins() {
+    public ResponseEntity<List<MedecinResponse>> getAllMedecins(
+            @RequestParam(required = false) Long specialiteId) {
+        if (specialiteId != null) {
+            return ResponseEntity.ok(medecinService.getMedecinsBySpecialiteId(specialiteId));
+        }
         return ResponseEntity.ok(medecinService.getAllMedecins());
     }
 
-    // GET /api/public/medecins/specialite/{specialite}
+    // GET /api/public/medecins/specialite/{specialite} (ancien endpoint conservé)
     @GetMapping("/medecins/specialite/{specialite}")
     public ResponseEntity<List<MedecinResponse>> getBySpecialite(
             @PathVariable String specialite) {

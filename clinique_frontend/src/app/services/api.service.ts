@@ -27,6 +27,13 @@ export class ApiService {
     );
   }
 
+  getMedecinsBySpecialiteId(specialiteId: number): Observable<Medecin[]> {
+    return this.http.get<Medecin[]>(
+      `${this.API_URL}${API_CONFIG.endpoints.public.medecins}`,
+      { params: { specialiteId: specialiteId.toString() } }
+    );
+  }
+
 
 getMedecinDetails(id: number): Observable<any> {
   return this.http.get(`${this.API_URL}/admin/medecins/${id}/details`);
