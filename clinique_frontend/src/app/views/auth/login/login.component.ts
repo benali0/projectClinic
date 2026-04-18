@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { MatCardModule } from '@angular/material/card';
@@ -15,13 +20,19 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
   selector: 'app-login',
   standalone: true,
   imports: [
-    CommonModule, ReactiveFormsModule, RouterLink,
-    MatCardModule, MatFormFieldModule, MatInputModule,
-    MatButtonModule, MatIconModule, MatProgressSpinnerModule,
-    MatCheckboxModule
+    CommonModule,
+    ReactiveFormsModule,
+    RouterLink,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    MatCheckboxModule,
   ],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
@@ -31,23 +42,23 @@ export class LoginComponent implements OnInit {
 
   // Mapping des rôles vers les routes
   private readonly ROLE_ROUTES: { [key: string]: string } = {
-    'ADMIN': '/admin/dashboard',
-    'MEDECIN': '/medecin/dashboard',
-    'PATIENT': '/patient/dashboard',
+    ADMIN: '/admin/dashboard',
+    MEDECIN: '/medecin/dashboard',
+    PATIENT: '/patient/dashboard',
     // Fallbacks si le rôle a différents formats
-    'ROLE_ADMIN': '/admin/dashboard',
-    'ROLE_MEDECIN': '/medecin/dashboard',
-    'ROLE_PATIENT': '/patient/dashboard'
+    ROLE_ADMIN: '/admin/dashboard',
+    ROLE_MEDECIN: '/medecin/dashboard',
+    ROLE_PATIENT: '/patient/dashboard',
   };
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
     });
   }
 
@@ -89,8 +100,9 @@ export class LoginComponent implements OnInit {
       error: (err) => {
         this.isLoading = false;
         console.error('❌ Erreur HTTP:', err);
-        this.errorMessage = 'Impossible de contacter le serveur. Vérifiez que le backend est démarré sur http://localhost:8081';
-      }
+        this.errorMessage =
+          'Impossible de contacter le serveur. Vérifiez que le backend est démarré sur http://localhost:8082';
+      },
     });
   }
 
@@ -106,7 +118,7 @@ export class LoginComponent implements OnInit {
 
     // Chercher la route
     let targetRoute = this.ROLE_ROUTES[normalizedRole];
-    
+
     // Si pas trouvé, essayer avec le rôle original
     if (!targetRoute) {
       targetRoute = this.ROLE_ROUTES[role];
@@ -114,28 +126,34 @@ export class LoginComponent implements OnInit {
 
     // Fallback final
     if (!targetRoute) {
-      console.warn('⚠️ Rôle non reconnu:', role, '- Redirection par défaut vers PATIENT');
+      console.warn(
+        '⚠️ Rôle non reconnu:',
+        role,
+        '- Redirection par défaut vers PATIENT',
+      );
       targetRoute = '/patient/dashboard';
     }
 
     console.log('🚀 Navigation vers:', targetRoute);
 
     // Navigation avec animation de chargement
-    this.router.navigate([targetRoute], { 
-      replaceUrl: true,
-      skipLocationChange: false 
-    }).then(success => {
-      if (success) {
-        console.log('✅ Navigation réussie!');
-      } else {
-        console.error('❌ Navigation échouée');
-        this.errorMessage = 'Erreur de navigation. Veuillez réessayer.';
-      }
-    });
+    this.router
+      .navigate([targetRoute], {
+        replaceUrl: true,
+        skipLocationChange: false,
+      })
+      .then((success) => {
+        if (success) {
+          console.log('✅ Navigation réussie!');
+        } else {
+          console.error('❌ Navigation échouée');
+          this.errorMessage = 'Erreur de navigation. Veuillez réessayer.';
+        }
+      });
   }
 
   private markAllAsTouched(): void {
-    Object.values(this.loginForm.controls).forEach(control => {
+    Object.values(this.loginForm.controls).forEach((control) => {
       control.markAsTouched();
     });
   }

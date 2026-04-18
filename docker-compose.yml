@@ -1,12 +1,20 @@
 services:
   db:
     image: mysql:8.4
+    restart: unless-stopped
     environment:
       MYSQL_DATABASE: clinicdb
       MYSQL_USER: clinic
       MYSQL_PASSWORD: clinicpass
       MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_HOST: "%"
+    healthcheck:
+      test:
+        ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-prootpass"]
+      interval: 5s
+      timeout: 10s
+      retries: 20
+      start_period: 30s
     ports:
       - "3306:3306"
     volumes:
@@ -15,12 +23,14 @@ services:
   backend:
     build:
       context: ./Clinique_backend
+    restart: on-failure
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/clinicdb?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: clinic
       SPRING_DATASOURCE_PASSWORD: clinicpass
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
       - "8082:8082"
 
@@ -31,6 +41,18 @@ services:
       - backend
     ports:
       - "4200:80"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    ports:
+      - "8088:80"
 
 volumes:
   db_data:

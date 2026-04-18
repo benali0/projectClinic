@@ -10,5 +10,5 @@ RUN npm run build
 FROM nginx:alpine
 # Angular build output: souvent dist/<project-name>/...
 # On va copier tout dist/ vers nginx html
-COPY --from=build /app/dist/ /usr/share/nginx/html
+COPY --from=build /app/dist/clinique_backend/browser/ /usr/share/nginx/html
 EXPOSE 80
