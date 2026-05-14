@@ -117,9 +117,14 @@ public class RendezVousController {
     // ==================== ADMIN ====================
     
     @GetMapping
-    public ResponseEntity<List<RendezVousResponse>> getAllRendezVous() {
-        logger.info("📋 Liste tous les RDV");
-        return ResponseEntity.ok(rendezVousService.getAllRendezVous());
+    public ResponseEntity<List<RendezVousResponse>> getAllRendezVous(
+            @RequestParam(required = false) String statut) {
+        if (statut == null || statut.isBlank()) {
+            logger.info("📋 Liste tous les RDV");
+        } else {
+            logger.info("📋 Liste tous les RDV (filtre statut={})", statut);
+        }
+        return ResponseEntity.ok(rendezVousService.getAllRendezVous(statut));
     }
     
     @GetMapping("/filter/patient/{patientId}")

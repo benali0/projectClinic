@@ -6,8 +6,10 @@ import com.itbs.clinique.repositories.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,6 +26,14 @@ public class RendezVousServiceImpl implements RendezVousService {
     private final PatientRepository patientRepository;
     private final MedecinRepository medecinRepository;
     private final NotificationService notificationService;
+
+        private static final Set<String> STATUTS_VALIDES = Set.of(
+            "EN_ATTENTE",
+            "CONFIRME",
+            "ANNULE",
+            "TERMINE",
+            "NON_VENU"
+        );
 
     private static final int DUREE_RDV_MINUTES = 30;
     
@@ -336,6 +346,25 @@ public class RendezVousServiceImpl implements RendezVousService {
     public List<RendezVousResponse> getAllRendezVous() {
         return rendezVousRepository.findAll().stream()
                 .map(this::mapToResponse).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<RendezVousResponse> getAllRendezVous(String statut) {
+        if (statut == null || statut.isBlank()) {
+            return getAllRendezVous();
+        }
+
+        String normalized = statut.trim().toUpperCase(Locale.ROOT);
+        if (!STATUTS_VALIDES.contains(normalized)) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Statut invalide: " + statut + ". Valeurs acceptées: " + STATUTS_VALIDES
+            );
+        }
+
+        return rendezVousRepository.findByStatutIgnoreCase(normalized).stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
     }
     
     @Override

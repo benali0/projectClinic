@@ -24,8 +24,10 @@ public interface RendezVousService {
     
     // ========== ADMIN ==========
     List<RendezVousResponse> getAllRendezVous();
+    List<RendezVousResponse> getAllRendezVous(String statut);
     List<RendezVousResponse> filterByPatient(Long patientId);
     List<RendezVousResponse> filterBySpecialite(String specialite);
     List<RendezVousResponse> filterByMedecinAndDate(Long medecinId, Date date);
     
-    RendezVousResponse updateStatus(Long rendezVousId, String status, Long medecinUserId);}
+    RendezVousResponse updateStatus(Long rendezVousId, String status, Long medecinUserId);
+}

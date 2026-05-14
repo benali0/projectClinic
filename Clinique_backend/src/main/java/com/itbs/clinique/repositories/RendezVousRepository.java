@@ -22,6 +22,7 @@ public interface RendezVousRepository extends JpaRepository<RendezVous, Long> {
     List<RendezVous> findByMedecinId(Long medecinId);
     List<RendezVous> findByMedecinIdAndDate(Long medecinId, Date date);
     List<RendezVous> findByMedecinIdAndDateBetween(Long medecinId, Date start, Date end);
+       List<RendezVous> findByStatutIgnoreCase(String statut);
     
     @Query("SELECT r FROM RendezVous r WHERE r.medecin.specialite = :specialite")
     List<RendezVous> findByMedecinSpecialite(@Param("specialite") String specialite);
