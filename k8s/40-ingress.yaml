@@ -1,0 +1,40 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: clinique-ingress
+  namespace: clinique
+  annotations:
+    kubernetes.io/ingress.class: "gce"
+spec:
+  ingressClassName: gce
+  rules:
+    - http:
+        paths:
+          - path: /clinique/api
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 8082
+          - path: /clinique/v3/api-docs
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 8082
+          - path: /clinique/swagger-ui
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 8082
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80
